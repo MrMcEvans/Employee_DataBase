@@ -1,4 +1,5 @@
-CREATE DATABASE employee_db IF NOT EXISTS;
+DROP DATABASE IF EXISTS employee_db;
+CREATE DATABASE employee_db;
 
 USE employee_db;
 
@@ -7,7 +8,7 @@ CREATE TABLE department(
     name VARCHAR(30) NOT NULL
 );
 
-CREATE TABLE role(
+CREATE TABLE job(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(30) NOT NULL,
     salary DECIMAL,
@@ -19,6 +20,6 @@ CREATE TABLE employee(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     firstName VARCHAR(30) NOT NULL,
     lastName VARCHAR(30) NOT NULL,
-    role_id INT REFERENCES role(id) ON DELETE SET NULL,
+    job_id INT REFERENCES job(id) ON DELETE SET NULL,
     manager_id INT NOT NULL
 );

@@ -1,19 +1,21 @@
 const mysql = require("mysql2");
 const inquirer = require('inquirer');
-// import * as mysql from 'mysql2'
-// import inquirer from 'inquirer';
-
 const db = mysql.createConnection(
     {
       host: 'localhost',
+      port: '3001',
       user: 'root',
       password: 'McClellan17!',
       database: 'employee_db'
     },
     console.log('Connected to the employee database')
     );
+    
+
+
 
 function init(){
+
     inquirer.prompt([{
         type: "list",
         name: "choices",
@@ -28,24 +30,21 @@ function init(){
         ],
     }
 ]).then((answers) => {
-    const userChoice = answers.userChoice;
+    const userChoice = answers.choices;
     if (userChoice === "view all departments"){
         db.query("SELECT * FROM departments", (error, results) => {
             if (error) throw error;
             console.log(results);
-            db.end();
         });
     }else if (userChoice === 'view all employees') {
         db.query('SELECT * FROM employees', (error, results) => {
           if (error) throw error;
           console.log(results); 
-          db.end();
         });
     }else if (userChoice === 'view all roles') {
         db.query('SELECT * FROM roles', (error, results) => {
           if (error) throw error;
           console.log(results); 
-          db.end();
         });
     }else if (userChoice === "add an employee") {
         inquirer.prompt([{
@@ -80,8 +79,20 @@ function init(){
             if(err) throw error;
         })
     })
-    }else if (userChoice === "update_role") {
-
+    }else if (userChoice === "add a department") {
+        inquirer.prompt([{
+            type: "input",
+            name: "departmentName",
+            message: "Please enter the department name"
+        },
+        {
+            type: "input",
+            name: "departmetnId",
+            message: "Please enter a department ID"
+        },
+    ]).then((answers) => {
+        
+    })
     }
 })
 };
