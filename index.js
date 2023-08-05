@@ -1,18 +1,10 @@
-const mysql = require("mysql2");
+
 const inquirer = require('inquirer');
-const db = mysql.createConnection(
-    {
-      host: 'localhost',
-      port: '3001',
-      user: 'root',
-      password: 'McClellan17!',
-      database: 'employee_db'
-    },
-    console.log('Connected to the employee database')
-    );
+
+const createDbConnection = require('./db/connection')
+
+const db = createDbConnection()
     
-
-
 
 function init(){
 
@@ -31,7 +23,7 @@ function init(){
     }
 ]).then((answers) => {
     const userChoice = answers.choices;
-    if (userChoice === "view all departments"){
+    if (userChoice === "view_department"){
         db.query("SELECT * FROM departments", (error, results) => {
             if (error) throw error;
             console.log(results);
@@ -39,7 +31,7 @@ function init(){
     }else if (userChoice === 'view all employees') {
         db.query('SELECT * FROM employees', (error, results) => {
           if (error) throw error;
-          console.log(results); 
+          console.log(results) 
         });
     }else if (userChoice === 'view all roles') {
         db.query('SELECT * FROM roles', (error, results) => {
