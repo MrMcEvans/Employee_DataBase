@@ -3,11 +3,10 @@ const inquirer = require('inquirer');
 
 const createDbConnection = require('./db/connection')
 
-const db = createDbConnection()
-    
+
 
 function init(){
-
+    const db = createDbConnection()
     inquirer.prompt([{
         type: "list",
         name: "choices",
@@ -24,21 +23,21 @@ function init(){
 ]).then((answers) => {
     const userChoice = answers.choices;
     if (userChoice === "view_department"){
-        db.query("SELECT * FROM departments", (error, results) => {
+        db.query("SELECT * FROM department", (error, results) => {
             if (error) throw error;
             console.log(results);
         });
-    }else if (userChoice === 'view all employees') {
-        db.query('SELECT * FROM employees', (error, results) => {
+    }else if (userChoice === 'view_employees') {
+        db.query('SELECT * FROM employee', (error, results) => {
           if (error) throw error;
           console.log(results) 
         });
-    }else if (userChoice === 'view all roles') {
-        db.query('SELECT * FROM roles', (error, results) => {
+    }else if (userChoice === 'view_roles') {
+        db.query('SELECT * FROM job', (error, results) => {
           if (error) throw error;
           console.log(results); 
         });
-    }else if (userChoice === "add an employee") {
+    }else if (userChoice === "add_employee") {
         inquirer.prompt([{
             type: 'input',
             name: 'firstName',
@@ -62,16 +61,16 @@ function init(){
     ]).then((answers) => {
         const firstName = answers.firstName;
         const lastName = answers.lastName;
-        const roleID = answers.roleID;
-        const manager = answers.managerID || null;
-        const query = 'INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)';
+        const roleID = answers.roleId;
+        const manager = answers.managerId;
+        const query = 'INSERT INTO employee (firstName, lastName, job_id, manager_id) VALUES (?, ?, ?, ?)';
         const values = [firstName, lastName, roleID, manager];
 
         db.query(query, values, (err, result) => {
-            if(err) throw error;
+            if(err) throw err;
         })
     })
-    }else if (userChoice === "add a department") {
+    }else if (userChoice === "add_department") {
         inquirer.prompt([{
             type: "input",
             name: "departmentName",

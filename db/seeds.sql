@@ -3,7 +3,7 @@ VALUES(1, "Elias", "Vergos", 2, 69),
       (2, "Collin", "Cross", 4, 420),
       (4, "Dante", "Guizotti", 4, 21),
       (3, "Noah", "Tysiac", 3, 8008),
-      (5, "Adam", "Sumner", 1, 24);
+      (5, "Adam", "Sumner", 1, 42);
 
 INSERT INTO job (id, title, salary, department_id)
 VALUES(2, "Health Class Professional", 100000.00, 2),

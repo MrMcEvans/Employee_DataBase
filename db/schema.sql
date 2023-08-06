@@ -21,5 +21,5 @@ CREATE TABLE employee(
     firstName VARCHAR(30) NOT NULL,
     lastName VARCHAR(30) NOT NULL,
     job_id INT REFERENCES job(id) ON DELETE SET NULL,
-    manager_id INT NOT NULL
+    manager_id INT
 );
