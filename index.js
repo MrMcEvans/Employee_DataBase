@@ -18,6 +18,7 @@ function init(){
             {choices: "add a department", value: "add_department"},
             {choices: "add an employee", value: "add_employee"},
             {choices: "update an employee role", value: "update_roll"},
+            {choices: "Exit", value: "exit"}
         ],
     }
 ]).then((answers) => {
@@ -26,16 +27,19 @@ function init(){
         db.query("SELECT * FROM department", (error, results) => {
             if (error) throw error;
             console.log(results);
+            init()
         });
     }else if (userChoice === 'view_employees') {
-        db.query('SELECT * FROM employee', (error, results) => {
+        db.query("SELECT * FROM employee", (error, results) => {
           if (error) throw error;
           console.log(results) 
+          init()
         });
     }else if (userChoice === 'view_roles') {
-        db.query('SELECT * FROM job', (error, results) => {
+        db.query("SELECT * FROM job", (error, results) => {
           if (error) throw error;
           console.log(results); 
+          init()
         });
     }else if (userChoice === "add_employee") {
         inquirer.prompt([{
@@ -73,17 +77,28 @@ function init(){
     }else if (userChoice === "add_department") {
         inquirer.prompt([{
             type: "input",
-            name: "departmentName",
-            message: "Please enter the department name"
+            name: "departmentId",
+            message: "Please enter the department ID"
         },
         {
             type: "input",
-            name: "departmetnId",
-            message: "Please enter a department ID"
+            name: "departmentName",
+            message: "Please enter a department name"
         },
     ]).then((answers) => {
-        
+        const departmentName = answers.departmentName;
+        const departmentId = answers.departmentId;
+        const departmentQuery = 'INSERT INTO department (id, name)  VALUES (?, ?)';
+        const departmentValues = [departmentId, departmentName];
+
+        db.query(departmentQuery, departmentValues, (err, results) => {
+        if (err){ throw err
+        }else{
+            console.log("Department added!")
+            init()
+            }})    
     })
+    
     }
 })
 };
