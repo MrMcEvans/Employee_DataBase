@@ -12,7 +12,7 @@ VALUES(2, "Health Class Professional", 100000.00, 2),
       (2, "Romantic Consultant", 1.00, 4),
       (2, "Bong Specialist", 1000000.00, 5);
 
-INSERT INTO department(id, name)
+INSERT INTO department(id, title)
 VALUES(2, "Student Wellness"),
       (3, "Talent Department"),
       (1, "Mental Health"),

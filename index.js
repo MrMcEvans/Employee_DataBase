@@ -1,25 +1,22 @@
-
+const db = require('./db/connection')
 const inquirer = require('inquirer');
 
-const createDbConnection = require('./db/connection')
 
 
-
-function init(){
-    const db = createDbConnection()
+async function init(){
     inquirer.prompt([{
         type: "list",
         name: "choices",
         message: "What would you like to do?",
         choices: [
-            {choices: "view all departments", value: "view_department"},
-            {choices: "view all employees", value: "view_employees"},
-            {choices: "view all roles", value: "view_roles"},
-            {choices: "add a department", value: "add_department"},
-            {choices: "add an employee", value: "add_employee"},
-            {choices: "update an employee role", value: "update_roll"},
-            {choices: "Exit", value: "exit"}
-        ],
+             "view_department",
+             "view_employees",
+             "view_roles",
+             "add_department",
+             "add_employee",
+             "update_role",
+             "exit"
+        ]
     }
 ]).then((answers) => {
     const userChoice = answers.choices;
@@ -27,19 +24,19 @@ function init(){
         db.query("SELECT * FROM department", (error, results) => {
             if (error) throw error;
             console.log(results);
-            init()
+            // init()
         });
     }else if (userChoice === 'view_employees') {
         db.query("SELECT * FROM employee", (error, results) => {
           if (error) throw error;
           console.log(results) 
-          init()
+        //   init()
         });
     }else if (userChoice === 'view_roles') {
         db.query("SELECT * FROM job", (error, results) => {
           if (error) throw error;
-          console.log(results); 
-          init()
+          console.log(results) 
+        //   init()
         });
     }else if (userChoice === "add_employee") {
         inquirer.prompt([{
@@ -99,6 +96,28 @@ function init(){
             }})    
     })
     
+    }else if (userChoice === "update_role") {
+        inquirer.prompt([{
+            type: 'list',
+            name: 'job',
+            message: 'What job would you like to update?:',
+            choices: [
+                "Health Class Professional",
+                "Rocket League Coach",
+                "Closet Expert",
+                "Romantic Consultant",
+                "Bong Specialist",
+            ]
+        }
+    ]).then((answers) => {
+        const firstName = answers.firstName;
+        const query = 'INSERT INTO employee (firstName, lastName, job_id, manager_id) VALUES (?, ?, ?, ?)';
+        const values = [firstName, lastName, roleID, manager];
+
+        db.query(query, values, (err, result) => {
+            if(err) throw err;
+        })
+    })
     }
 })
 };
