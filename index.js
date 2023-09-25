@@ -29,7 +29,7 @@ async function init() {
           init();
         });
       } else if (userChoice === 'view_employees') {
-        db.query('SELECT * FROM employee', (error, results) => {
+        db.query(`SELECT * FROM employee`, (error, results) => {
           if (error) throw error;
           console.table(results);
           init();
@@ -81,6 +81,7 @@ async function init() {
             });
           });
       } else if (userChoice === 'add_department') {
+        
         inquirer
           .prompt([
             {
@@ -111,32 +112,53 @@ async function init() {
             });
           });
       } else if (userChoice === 'add_role') {
-        inquirer
-          .prompt([
-            {
-              type: 'input',
-              name: 'newJobTitle',
-              message: 'Enter the new job title:',
-            },
-            {
-              type: 'input',
-              name: 'newSalary',
-              message: 'Enter the new salary:',
-            },
-          ])
-          .then((answers) => {
-            const jobTitle = answers.newJobTitle;
-            const jobSalary = answers.newSalary;
-            const query = `INSERT INTO job (title, salary) VALUES (?, ?)`;
-            const values = [jobTitle, jobSalary];
-
-            db.query(query, values, (err, result) => {
-              if (err) throw err;
-              console.log(`Role ${jobTitle} added successfully.`);
-              init();
+        // First, query the database to get the list of available departments
+        const departmentQuery = 'SELECT * FROM department';
+      
+        db.query(departmentQuery, (err, departments) => {
+          if (err) throw err;
+      
+          const departmentChoices = departments.map((department) => ({
+            name: department.name,
+            value: department.id,
+          }));
+      
+          inquirer
+            .prompt([
+              {
+                type: 'input',
+                name: 'newJobTitle',
+                message: 'Enter the new job title:',
+              },
+              {
+                type: 'input',
+                name: 'newSalary',
+                message: 'Enter the new salary:',
+              },
+              {
+                type: 'list',
+                name: 'departmentId',
+                message: 'Select a department for the new job:',
+                choices: departmentChoices,
+              },
+            ])
+            .then((answers) => {
+              const jobTitle = answers.newJobTitle;
+              const jobSalary = answers.newSalary;
+              const departmentId = answers.departmentId;
+      
+              const query = 'INSERT INTO job (title, salary, department_id) VALUES (?, ?, ?)';
+              const values = [jobTitle, jobSalary, departmentId];
+      
+              db.query(query, values, (err, result) => {
+                if (err) throw err;
+                console.log(`Role ${jobTitle} added successfully.`);
+                init();
+              });
             });
-          });
-      } else if (userChoice === 'update_employee') {
+        });
+      }
+       else if (userChoice === 'update_employee') {
         db.query(
           'SELECT id, firstName, lastName FROM employee',
           (err, employees) => {
