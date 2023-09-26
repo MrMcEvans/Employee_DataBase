@@ -112,7 +112,6 @@ async function init() {
             });
           });
       } else if (userChoice === 'add_role') {
-        // First, query the database to get the list of available departments
         const departmentQuery = 'SELECT * FROM department';
       
         db.query(departmentQuery, (err, departments) => {
@@ -204,12 +203,12 @@ async function init() {
               ])
               .then((answers) => {
                 const employeeId = answers.employeeId;
-                const firstName = answers.firstName || null; // Use null if no input
+                const firstName = answers.firstName || null;
                 const lastName = answers.lastName || null;
                 const roleId = answers.roleId || null;
                 const managerId = answers.managerId || null;
 
-                // Construct the UPDATE query based on provided inputs
+            
                 const query = 'UPDATE employee SET ? WHERE id = ?';
                 const values = [
                   {
